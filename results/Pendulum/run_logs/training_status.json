@@ -1,0 +1,65 @@
+{
+    "Pendulum": {
+        "checkpoints": [
+            {
+                "steps": 1699971,
+                "file_path": "results\\Pendulum\\Pendulum\\Pendulum-1699971.onnx",
+                "reward": 6514.105820973714,
+                "creation_time": 1780177623.0937455,
+                "auxillary_file_paths": [
+                    "results\\Pendulum\\Pendulum\\Pendulum-1699971.pt"
+                ]
+            },
+            {
+                "steps": 1799995,
+                "file_path": "results\\Pendulum\\Pendulum\\Pendulum-1799995.onnx",
+                "reward": 6513.365836007254,
+                "creation_time": 1780177708.1794338,
+                "auxillary_file_paths": [
+                    "results\\Pendulum\\Pendulum\\Pendulum-1799995.pt"
+                ]
+            },
+            {
+                "steps": 1899995,
+                "file_path": "results\\Pendulum\\Pendulum\\Pendulum-1899995.onnx",
+                "reward": 6517.729568481445,
+                "creation_time": 1780177792.8613281,
+                "auxillary_file_paths": [
+                    "results\\Pendulum\\Pendulum\\Pendulum-1899995.pt"
+                ]
+            },
+            {
+                "steps": 1999963,
+                "file_path": "results\\Pendulum\\Pendulum\\Pendulum-1999963.onnx",
+                "reward": 6519.654923756917,
+                "creation_time": 1780177874.4456465,
+                "auxillary_file_paths": [
+                    "results\\Pendulum\\Pendulum\\Pendulum-1999963.pt"
+                ]
+            },
+            {
+                "steps": 2000003,
+                "file_path": "results\\Pendulum\\Pendulum\\Pendulum-2000003.onnx",
+                "reward": 6519.16577735314,
+                "creation_time": 1780177874.5296643,
+                "auxillary_file_paths": [
+                    "results\\Pendulum\\Pendulum\\Pendulum-2000003.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 2000003,
+            "file_path": "results\\Pendulum\\Pendulum.onnx",
+            "reward": 6519.16577735314,
+            "creation_time": 1780177874.5296643,
+            "auxillary_file_paths": [
+                "results\\Pendulum\\Pendulum\\Pendulum-2000003.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.2.0.dev0",
+        "torch_version": "2.2.2+cu121"
+    }
+}
