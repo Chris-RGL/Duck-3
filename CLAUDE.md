@@ -30,7 +30,17 @@ mlagents-learn config/trainer_config.yaml --run-id=<run_name>
 
 Then press **Play** in the Unity Editor. To resume a stopped run add `--resume`.
 
-The active config is `config/trainer_config.yaml` targeting behavior name **`Pendulum`** (must match the *Behavior Name* field in `BehaviorParameters` on the Cart). Key settings: PPO, `normalize: true`, `max_steps: 500000`, `DecisionPeriod: 5`. Raise `max_steps` to 1–2M if the policy plateaus. Set **Max Step** in `BehaviorParameters` to `5000` to cap episode length.
+The active config is `config/trainer_config.yaml` targeting behavior name **`Pendulum`** (must match the *Behavior Name* field in `BehaviorParameters` on the Cart). Key settings: PPO, `normalize: true`, `max_steps: 2000000`, 32 parallel agents, `DecisionPeriod: 5`. Set **Max Step** in `BehaviorParameters` to `5000` to cap episode length.
+
+The pendulum model has been successfully trained to balance. The current architecture does **adaptive gain scheduling** — the NN outputs different Kp/Ki/Kd values each step based on the current state (angle, velocity, etc.), rather than settling on a single fixed set. This is expected and intentional.
+
+**Adaptive vs fixed gains trade-off:**
+- **Adaptive (current)**: more capable when disturbances are present (random pushes, variable mass). The NN reactively adjusts gains based on state.
+- **Fixed**: sufficient for a stable plant with no disturbances. Simpler and fully interpretable.
+
+To extract fixed gains from the trained model: run it while balanced, log the Kp/Ki/Kd outputs over ~1000 steps, and average them. Those values can be hardcoded into `PendulumController` and the ML agent removed entirely.
+
+To make the agent find fixed gains instead of doing gain scheduling: restructure `OnActionReceived` to apply gains only once per episode (in `OnEpisodeBegin`) rather than every decision step.
 
 ## Architecture
 

@@ -1,0 +1,65 @@
+{
+    "Rocket": {
+        "checkpoints": [
+            {
+                "steps": 3959,
+                "file_path": "results\\Rocket\\Rocket\\Rocket-3959.onnx",
+                "reward": 2.2598482655982175,
+                "creation_time": 1780184581.9498065,
+                "auxillary_file_paths": [
+                    "results\\Rocket\\Rocket\\Rocket-3959.pt"
+                ]
+            },
+            {
+                "steps": 5973,
+                "file_path": "results\\Rocket\\Rocket\\Rocket-5973.onnx",
+                "reward": 2.0081140965223314,
+                "creation_time": 1780184615.6336508,
+                "auxillary_file_paths": [
+                    "results\\Rocket\\Rocket\\Rocket-5973.pt"
+                ]
+            },
+            {
+                "steps": 7945,
+                "file_path": "results\\Rocket\\Rocket\\Rocket-7945.onnx",
+                "reward": 2.015068382024765,
+                "creation_time": 1780184653.9593399,
+                "auxillary_file_paths": [
+                    "results\\Rocket\\Rocket\\Rocket-7945.pt"
+                ]
+            },
+            {
+                "steps": 9943,
+                "file_path": "results\\Rocket\\Rocket\\Rocket-9943.onnx",
+                "reward": 1.472686638434728,
+                "creation_time": 1780184688.5623155,
+                "auxillary_file_paths": [
+                    "results\\Rocket\\Rocket\\Rocket-9943.pt"
+                ]
+            },
+            {
+                "steps": 10007,
+                "file_path": "results\\Rocket\\Rocket\\Rocket-10007.onnx",
+                "reward": 1.472686638434728,
+                "creation_time": 1780184688.6806886,
+                "auxillary_file_paths": [
+                    "results\\Rocket\\Rocket\\Rocket-10007.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 10007,
+            "file_path": "results\\Rocket\\Rocket.onnx",
+            "reward": 1.472686638434728,
+            "creation_time": 1780184688.6806886,
+            "auxillary_file_paths": [
+                "results\\Rocket\\Rocket\\Rocket-10007.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.2.0.dev0",
+        "torch_version": "2.2.2+cu121"
+    }
+}
