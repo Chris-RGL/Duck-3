@@ -1,0 +1,65 @@
+{
+    "Catcher": {
+        "checkpoints": [
+            {
+                "steps": 699980,
+                "file_path": "results\\Catcher\\Catcher\\Catcher-699980.onnx",
+                "reward": 0.8321992239393294,
+                "creation_time": 1780224215.5559244,
+                "auxillary_file_paths": [
+                    "results\\Catcher\\Catcher\\Catcher-699980.pt"
+                ]
+            },
+            {
+                "steps": 799990,
+                "file_path": "results\\Catcher\\Catcher\\Catcher-799990.onnx",
+                "reward": 0.9379761677016231,
+                "creation_time": 1780226020.8702683,
+                "auxillary_file_paths": [
+                    "results\\Catcher\\Catcher\\Catcher-799990.pt"
+                ]
+            },
+            {
+                "steps": 899993,
+                "file_path": "results\\Catcher\\Catcher\\Catcher-899993.onnx",
+                "reward": 0.8983230263977829,
+                "creation_time": 1780227832.2103953,
+                "auxillary_file_paths": [
+                    "results\\Catcher\\Catcher\\Catcher-899993.pt"
+                ]
+            },
+            {
+                "steps": 999994,
+                "file_path": "results\\Catcher\\Catcher\\Catcher-999994.onnx",
+                "reward": 0.9246594697801108,
+                "creation_time": 1780229612.9973283,
+                "auxillary_file_paths": [
+                    "results\\Catcher\\Catcher\\Catcher-999994.pt"
+                ]
+            },
+            {
+                "steps": 1000025,
+                "file_path": "results\\Catcher\\Catcher\\Catcher-1000025.onnx",
+                "reward": 0.924964492169665,
+                "creation_time": 1780229613.1453726,
+                "auxillary_file_paths": [
+                    "results\\Catcher\\Catcher\\Catcher-1000025.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1000025,
+            "file_path": "results\\Catcher\\Catcher.onnx",
+            "reward": 0.924964492169665,
+            "creation_time": 1780229613.1453726,
+            "auxillary_file_paths": [
+                "results\\Catcher\\Catcher\\Catcher-1000025.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.2.0.dev0",
+        "torch_version": "2.2.2+cu121"
+    }
+}
