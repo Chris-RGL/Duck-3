@@ -8,11 +8,9 @@ using UnityEngine;
 /// Set launcher.agentControlled = true. Tag the bucket GameObject "Bucket".
 ///
 /// Episode flow:
-///   1. PrepareShot — launcher picks a random angle + power (ball not yet in scene).
-///   2. Positioning phase — agent has positioningSteps decisions to slide the bucket along X.
-///   3. Fire — after positioningSteps decisions the ball launches; bucket is locked for the rest.
-///   4. Result — ball hits "Bucket" (positive reward) or "Ground" (negative reward scaled by
-///      distance between landing spot and bucket centre), then episode ends.
+///   Agent rounds  — agent has positioningSteps decisions to slide the bucket along X, then auto-fires.
+///   Player rounds — bucket is driven by CatcherUI slider; player presses the UI fire button.
+///   After agentRounds + playerRounds episodes the scores reset and the cycle repeats.
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(DecisionRequester))]
 public class CatcherAgent : Agent
@@ -30,6 +28,12 @@ public class CatcherAgent : Agent
     [Header("Episode Phases")]
     [Tooltip("Number of decisions the agent has to position the bucket before the ball fires")]
     public int positioningSteps = 15;
+
+    [Header("Game Rounds")]
+    [Tooltip("Number of rounds the ML agent controls the bucket before handing off to the player")]
+    public int agentRounds = 3;
+    [Tooltip("Number of rounds the player controls the bucket after agent rounds")]
+    public int playerRounds = 3;
 
     [Header("Rewards")]
     [Tooltip("Reward when the ball is caught")]
@@ -49,6 +53,22 @@ public class CatcherAgent : Agent
     private int _positioningDecisions;
     private bool _ballFired;
     private bool _episodeActive;
+
+    private int _roundNumber;
+    private int _agentCatches;
+    private int _playerCatches;
+
+    // ── Public state for CatcherUI ────────────────────────────────────────────
+
+    public bool IsPlayerRound => _roundNumber >= agentRounds;
+    /// True when the player can interact: their round, episode active, no ball in flight yet.
+    public bool IsPlayerPhaseActive => IsPlayerRound && _episodeActive && !_ballFired;
+    public int AgentCatches => _agentCatches;
+    public int PlayerCatches => _playerCatches;
+    public int AgentRoundsTotal => agentRounds;
+    public int PlayerRoundsTotal => playerRounds;
+    public float PreparedAngle => launcher != null ? launcher.PreparedAngle : 0f;
+    public float PreparedPower => launcher != null ? launcher.PreparedPower : 0f;
 
     // ── Lifecycle ─────────────────────────────────────────────────────────────
 
@@ -70,13 +90,25 @@ public class CatcherAgent : Agent
 
     public override void OnEpisodeBegin()
     {
+        // Reset after completing a full cycle of agent + player rounds.
+        if (_roundNumber >= agentRounds + playerRounds)
+        {
+            _roundNumber = 0;
+            _agentCatches = 0;
+            _playerCatches = 0;
+        }
+
+        if (_activeProjectile != null)
+        {
+            _activeProjectile.onResult -= OnProjectileResult;
+            _activeProjectile = null;
+        }
+
         _rb.position = _startPosition;
-        _activeProjectile = null;
         _positioningDecisions = 0;
         _ballFired = false;
         _episodeActive = true;
 
-        // Randomise shot parameters so the agent can observe them — ball stays offscreen.
         launcher.PrepareShot();
     }
 
@@ -92,21 +124,27 @@ public class CatcherAgent : Agent
         if (!_episodeActive) return;
         _episodeActive = false;
 
-        if (caught)
+        if (IsPlayerRound)
         {
-            AddReward(catchReward);
+            if (caught) _playerCatches++;
         }
         else
         {
-            // Projectile.Destroy is deferred — position is still valid at this point.
-            float landingX = _activeProjectile != null ? _activeProjectile.transform.position.x : 0f;
-            float distance = Mathf.Abs(_rb.position.x - landingX);
-            float normalised = Mathf.Clamp01(distance / (2f * xLimit));
-            AddReward(-missMaxPenalty * normalised);
+            if (caught)
+            {
+                AddReward(catchReward);
+                _agentCatches++;
+            }
+            else
+            {
+                float landingX = _activeProjectile != null ? _activeProjectile.transform.position.x : 0f;
+                float distance = Mathf.Abs(_rb.position.x - landingX);
+                float normalised = Mathf.Clamp01(distance / (2f * xLimit));
+                AddReward(-missMaxPenalty * normalised);
+            }
         }
 
-        // Clear before EndEpisode so the synchronous OnEpisodeBegin → PrepareShot chain
-        // doesn't leave a stale reference when the next episode starts.
+        _roundNumber++;
         _activeProjectile = null;
         EndEpisode();
     }
@@ -124,8 +162,10 @@ public class CatcherAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actions)
     {
-        // Bucket is locked once the ball is in the scene.
         if (!_episodeActive || _ballFired) return;
+
+        // Player rounds are driven by the CatcherUI slider and fire button.
+        if (IsPlayerRound) return;
 
         float moveDir = actions.ContinuousActions[0];
         float newX = Mathf.Clamp(_rb.position.x + moveDir * movePerDecision, -xLimit, xLimit);
@@ -136,9 +176,16 @@ public class CatcherAgent : Agent
         {
             _ballFired = true;
             launcher.FirePrepared();
-            // FirePrepared calls onProjectileLaunched synchronously, so _activeProjectile
-            // is set and the result callback is wired before this line returns.
         }
+    }
+
+    // ── Player fire (called by CatcherUI fire button) ─────────────────────────
+
+    public void OnPlayerFireButtonPressed()
+    {
+        if (!IsPlayerPhaseActive) return;
+        _ballFired = true;
+        launcher.FirePrepared();
     }
 
     // Left/right arrow keys move the bucket for play-mode testing without a trained model.

@@ -30,12 +30,6 @@ public class ProjectileLauncher : MonoBehaviour
     private float _launchAngle;
     private bool _readyToFire = true;
 
-    private void Start()
-    {
-        if (!agentControlled)
-            Fire();
-    }
-
     void Update()
     {
         transform.localRotation = Quaternion.Euler(0f, 0f, _launchAngle);
