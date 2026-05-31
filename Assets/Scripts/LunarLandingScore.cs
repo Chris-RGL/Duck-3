@@ -18,6 +18,8 @@ public class LunarLandingScore : MonoBehaviour
     public GameObject rocket1;
     [Tooltip("GameObject with RocketController on it")]
     public GameObject rocket2;
+    [Tooltip("Which rocket is the player — its score delta is forwarded to GameScoreManager")]
+    public bool playerIsRocket1 = true;
 
     [Header("Reward Weights — keep in sync with RocketAgent")]
     [Tooltip("Per-step reward when angle is near 0")]
@@ -55,11 +57,22 @@ public class LunarLandingScore : MonoBehaviour
 
     void FixedUpdate()
     {
-        _score1 += StepReward(_ctrl1, _rb1, ref _landed1);
-        _score2 += StepReward(_ctrl2, _rb2, ref _landed2);
+        float delta1 = StepReward(_ctrl1, _rb1, ref _landed1);
+        float delta2 = StepReward(_ctrl2, _rb2, ref _landed2);
+        _score1 += delta1;
+        _score2 += delta2;
+
+        GameScoreManager.Instance?.AddScore(playerIsRocket1 ? delta1 : delta2);
 
         rocket1ScoreText.text = $"{_score1:F2}";
         rocket2ScoreText.text = $"{_score2:F2}";
+    }
+
+    void OnDestroy()
+    {
+        float player = playerIsRocket1 ? _score1 : _score2;
+        float agent  = playerIsRocket1 ? _score2 : _score1;
+        GameScoreManager.Instance?.SetLunarStats(player, agent);
     }
 
     float StepReward(RocketController ctrl, Rigidbody rb, ref bool landed)

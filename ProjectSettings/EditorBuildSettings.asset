@@ -11,6 +11,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Pendulum.unity
     guid: 6f5dcc9e4bb70c94e90701a542aa50ea
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 0f610259cc37f8342a272479bb0895ba
+  - enabled: 1
+    path: Assets/Scenes/LunarLanding.unity
+    guid: 770a0bd0cb1da064b87e1afd9414ee4e
+  - enabled: 1
+    path: Assets/Scenes/ProjectileCatch.unity
+    guid: bcd1794a29b4de0428fb27c4382ace7a
+  - enabled: 1
+    path: Assets/Scenes/StatsMenu.unity
+    guid: 51778be6d7f334c4b9555995d019e96b
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

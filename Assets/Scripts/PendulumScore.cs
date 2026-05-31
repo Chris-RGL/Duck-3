@@ -47,11 +47,19 @@ public class PendulumScore : MonoBehaviour
 
     void FixedUpdate()
     {
-        _playerScore += StepReward(_playerCtrl, _playerCartRb, ref _playerFell);
+        float playerDelta = StepReward(_playerCtrl, _playerCartRb, ref _playerFell);
+        _playerScore += playerDelta;
         _agentScore  += StepReward(_agentCtrl,  _agentCartRb,  ref _agentFell);
+
+        GameScoreManager.Instance?.AddScore(playerDelta);
 
         playerScoreText.text = $"Player\n{_playerScore:F1}";
         agentScoreText.text  = $"Agent\n{_agentScore:F1}";
+    }
+
+    void OnDestroy()
+    {
+        GameScoreManager.Instance?.SetPendulumStats(_playerScore, _agentScore);
     }
 
     float StepReward(PendulumController ctrl, Rigidbody cartRb, ref bool fell)

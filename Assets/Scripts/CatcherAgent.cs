@@ -58,6 +58,12 @@ public class CatcherAgent : Agent
     private int _agentCatches;
     private int _playerCatches;
 
+    // Cumulative totals across all cycles — never reset, reported to stats on scene end.
+    private int _totalAgentCatches;
+    private int _totalPlayerCatches;
+    private int _totalAgentRoundsPlayed;
+    private int _totalPlayerRoundsPlayed;
+
     // ── Public state for CatcherUI ────────────────────────────────────────────
 
     public bool IsPlayerRound => _roundNumber >= agentRounds;
@@ -86,6 +92,10 @@ public class CatcherAgent : Agent
     {
         if (launcher != null)
             launcher.onProjectileLaunched -= OnProjectileLaunched;
+
+        GameScoreManager.Instance?.SetCatcherStats(
+            _totalPlayerCatches, _totalAgentCatches,
+            _totalPlayerRoundsPlayed, _totalAgentRoundsPlayed);
     }
 
     public override void OnEpisodeBegin()
@@ -126,14 +136,29 @@ public class CatcherAgent : Agent
 
         if (IsPlayerRound)
         {
-            if (caught) _playerCatches++;
+            _totalPlayerRoundsPlayed++;
+            if (caught)
+            {
+                GameScoreManager.Instance?.AddScore(1f);
+                _playerCatches++;
+                _totalPlayerCatches++;
+            }
+            else
+            {
+                float landingX = _activeProjectile != null ? _activeProjectile.transform.position.x : 0f;
+                float distance = Mathf.Abs(_rb.position.x - landingX);
+                float normalised = Mathf.Clamp01(distance / (2f * xLimit));
+                GameScoreManager.Instance?.AddScore(-missMaxPenalty * normalised);
+            }
         }
         else
         {
+            _totalAgentRoundsPlayed++;
             if (caught)
             {
                 AddReward(catchReward);
                 _agentCatches++;
+                _totalAgentCatches++;
             }
             else
             {

@@ -58,6 +58,7 @@ public class RocketController : MonoBehaviour
 
     public void ResetEpisode()
     {
+        if (_rb == null) _rb = GetComponent<Rigidbody>();
         _rb.position = new Vector3(0f, spawnHeight, spawnZ);
         _rb.rotation = Quaternion.identity;
         _rb.linearVelocity = Vector3.zero;
