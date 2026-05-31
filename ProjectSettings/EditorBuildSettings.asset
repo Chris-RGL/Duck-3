@@ -9,11 +9,11 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Scenes/Pendulum.unity
-    guid: 6f5dcc9e4bb70c94e90701a542aa50ea
-  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 0f610259cc37f8342a272479bb0895ba
+  - enabled: 1
+    path: Assets/Scenes/Pendulum.unity
+    guid: 6f5dcc9e4bb70c94e90701a542aa50ea
   - enabled: 1
     path: Assets/Scenes/LunarLanding.unity
     guid: 770a0bd0cb1da064b87e1afd9414ee4e
