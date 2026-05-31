@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 public class RocketController : MonoBehaviour
 {
     [Header("Manual Input")]
+    [Tooltip("When enabled, keyboard input is disabled and only the ML agent can control this rocket")]
+    public bool agentControlled = false;
     [Tooltip("Torque applied around the X axis per input frame (N·m)")]
     public float rotationTorque = 20f;
 
@@ -24,6 +26,8 @@ public class RocketController : MonoBehaviour
     public bool invertPidOutput = false;
 
     [Header("Episode Reset")]
+    [Tooltip("Z position the rocket spawns at on every reset")]
+    public float spawnZ = 0f;
     [Tooltip("Y position the rocket spawns at on every reset")]
     public float spawnHeight = 30f;
     [Tooltip("Max angular impulse (N·m·s) applied to the rocket on episode start to kick it into a spin")]
@@ -54,7 +58,7 @@ public class RocketController : MonoBehaviour
 
     public void ResetEpisode()
     {
-        _rb.position = new Vector3(0f, spawnHeight, 0f);
+        _rb.position = new Vector3(0f, spawnHeight, spawnZ);
         _rb.rotation = Quaternion.identity;
         _rb.linearVelocity = Vector3.zero;
         _rb.angularVelocity = Vector3.zero;
@@ -102,15 +106,18 @@ public class RocketController : MonoBehaviour
         if (_rb.position.y < controlCutoffY) return;
 
         // ── Manual keyboard input ─────────────────────────────────────────────
-        Keyboard kb = Keyboard.current;
-        if (kb != null)
+        if (!agentControlled)
         {
-            float input = 0f;
-            if (kb.aKey.isPressed || kb.leftArrowKey.isPressed)  input -= 1f;
-            if (kb.dKey.isPressed || kb.rightArrowKey.isPressed) input += 1f;
+            Keyboard kb = Keyboard.current;
+            if (kb != null)
+            {
+                float input = 0f;
+                if (kb.aKey.isPressed || kb.leftArrowKey.isPressed)  input -= 1f;
+                if (kb.dKey.isPressed || kb.rightArrowKey.isPressed) input += 1f;
 
-            if (input != 0f)
-                _rb.AddTorque(Vector3.right * input * rotationTorque, ForceMode.Force);
+                if (input != 0f)
+                    _rb.AddTorque(Vector3.right * input * rotationTorque, ForceMode.Force);
+            }
         }
 
         // ── PID rotation control ──────────────────────────────────────────────
