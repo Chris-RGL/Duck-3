@@ -62,11 +62,11 @@ public class PendulumAgent : Agent
         // Always reset cart to world origin regardless of where it was in the scene.
         // transform.position must be set directly so Physics.SyncTransforms() pushes
         // it into the physics engine — rb.position alone on a kinematic body is deferred.
-        transform.position = Vector3.zero;
+        transform.position = new Vector3(0f, 6f, 0f);
 
-        // Place rod at the same offset from the origin it had from the cart in the scene,
-        // so both objects arrive together at (0,0,0) + rod offset.
-        rodRigidbody.position = _rodOffsetFromCart;
+        // Place rod at the same offset from the cart it had in the scene,
+        // shifted to the new spawn height.
+        rodRigidbody.position = new Vector3(_rodOffsetFromCart.x, 6f + _rodOffsetFromCart.y, _rodOffsetFromCart.z);
         rodRigidbody.rotation = Quaternion.Euler(0f, 0f, Random.Range(-randomStartAngle, randomStartAngle));
         rodRigidbody.linearVelocity = Vector3.zero;
         rodRigidbody.angularVelocity = Vector3.zero;
